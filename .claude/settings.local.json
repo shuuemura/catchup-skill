@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch",
+      "Read",
+      "Edit(path:/Users/uemurasyu/experiment/catchup/output/**)",
+      "Write(path:/Users/uemurasyu/experiment/catchup/output/**)",
+      "Bash(git clone:*)",
+      "Bash(mkdir:*)",
+      "Bash(mkdir -p:*)",
+      "Bash(wc:*)",
+      "Bash(python3:*)",
+      "Bash(find /Users/uemurasyu/experiment/catchup/.claude -type f -not -path */skills/*)"
+    ]
+  }
+}

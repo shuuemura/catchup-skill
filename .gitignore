@@ -1,0 +1,17 @@
+# ベンチマーク用の参考リポジトリ
+source/
+
+# 実行結果（個人データを含む）
+output/
+
+# 開発用ドキュメント
+docs/
+
+# Obsidian設定（混入）
+.obsidian/
+
+# Claude Codeのプランファイル
+.claude/plans/
+
+# macOS
+.DS_Store
