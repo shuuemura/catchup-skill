@@ -4,14 +4,21 @@
       "WebSearch",
       "WebFetch",
       "Read",
-      "Edit(path:/Users/uemurasyu/experiment/catchup/output/**)",
-      "Write(path:/Users/uemurasyu/experiment/catchup/output/**)",
-      "Bash(git clone:*)",
-      "Bash(mkdir:*)",
-      "Bash(mkdir -p:*)",
-      "Bash(wc:*)",
-      "Bash(python3:*)",
-      "Bash(find /Users/uemurasyu/experiment/catchup/.claude -type f -not -path */skills/*)"
+      "Write(path:/**)",
+      "Edit(path:/**)",
+      "Bash(mkdir *)",
+      "Bash(echo *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(for *)",
+      "Bash(git add:*)"
+    ],
+    "deny": [
+      "Bash(rm *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(chmod *)",
+      "Bash(sudo *)"
     ]
   }
 }
