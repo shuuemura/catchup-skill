@@ -7,11 +7,13 @@
       "Write(path:/**)",
       "Edit(path:/**)",
       "Bash(mkdir *)",
+      "Bash(mkdir -p *)",
       "Bash(echo *)",
       "Bash(cat *)",
       "Bash(grep *)",
       "Bash(for *)",
-      "Bash(git add:*)"
+      "Bash(python3 *)",
+      "Bash(python3 -c *)"
     ],
     "deny": [
       "Bash(rm *)",
