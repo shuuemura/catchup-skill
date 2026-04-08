@@ -387,19 +387,16 @@ agentプロンプトテンプレート `./agents/research-examples.md` を読み
 
 #### Step 3-V1: 必須セクションの存在チェック
 
-各バッチファイルに対し、Bashで以下を実行する:
+各バッチファイルに対し、Bashではなく **Grep ツールと Read ツール** で以下を確認する:
 
-```bash
-for f in $SESSION_DIR/.intermediate/summary-batch-*.md; do
-  echo "=== $(basename $f) ==="
-  echo "資料数: $(grep -c '^#### 資料/' $f)"
-  echo "ストーリーライン: $(grep -c 'ストーリーライン' $f)"
-  echo "主要な主張: $(grep -c '主要な主張' $f)"
-done
-```
+1. 各バッチファイルを Grep で `^#### 資料/` を検索し、資料数をカウント
+2. 同じファイルを Grep で `ストーリーライン` を検索し、セクション数をカウント
+3. 同じファイルを Grep で `主要な主張` を検索し、セクション数をカウント
 
 各バッチで「資料数 = ストーリーライン数 = 主要な主張数」が成立すればOK。
 （論文の場合、主要な主張の代わりに品質評価があれば許容する）
+
+**注意: バリデーションに Bash は使わない。Grep/Read ツールを使うこと。**
 
 #### Step 3-V2: 品質チェック
 
@@ -519,26 +516,17 @@ Phase 3 のバッチファイルを `cat` でそのまま結合する。
 deep-summary.md のフォーマット指定により、バッチファイルは
 既に 02_references.md 用の見出しレベル（`####`/`#####`）で出力されている。
 
-```bash
-# 海外資料（batch-1〜3）
-echo "" >> $SESSION_DIR/02_references.md
-echo "### 海外資料" >> $SESSION_DIR/02_references.md
-echo "" >> $SESSION_DIR/02_references.md
-for f in $SESSION_DIR/.intermediate/summary-batch-{1,2,3}.md; do
-  cat "$f" >> $SESSION_DIR/02_references.md
-  echo "" >> $SESSION_DIR/02_references.md
-done
+**Bash ではなく Read + Edit ツールで結合すること。**
+`SESSION_DIR=... && for ...` のようなBashチェーンは権限確認が発生するため使わない。
 
-# 日本語資料（batch-4〜6）
-echo "---" >> $SESSION_DIR/02_references.md
-echo "" >> $SESSION_DIR/02_references.md
-echo "### 日本語資料" >> $SESSION_DIR/02_references.md
-echo "" >> $SESSION_DIR/02_references.md
-for f in $SESSION_DIR/.intermediate/summary-batch-{4,5,6}.md; do
-  cat "$f" >> $SESSION_DIR/02_references.md
-  echo "" >> $SESSION_DIR/02_references.md
-done
-```
+手順:
+1. 各バッチファイルを **Read ツール** で読み込む
+2. 読み込んだ内容を以下の順序で **Edit ツール** を使って `$SESSION_DIR/02_references.md` の末尾に追記する:
+   - `### 海外資料` 見出し
+   - batch-1, batch-2, batch-3 の内容（海外資料）
+   - `---` 区切り
+   - `### 日本語資料` 見出し
+   - batch-4, batch-5, batch-6 の内容（日本語資料）
 
 **注意: バッチ分割は Phase 3 でランキング順に行うこと。**
 海外 Top 1-3 → batch-1、海外 Top 4-6 → batch-2、海外 Top 7-10 → batch-3、
@@ -547,11 +535,11 @@ done
 
 #### Step 4-4-3: 検証
 
-結合完了後、以下をBashで確認する:
-```bash
-echo "ストーリーライン: $(grep -c 'ストーリーライン' $SESSION_DIR/02_references.md)"
-echo "主要な主張: $(grep -c '主要な主張' $SESSION_DIR/02_references.md)"
-```
+結合完了後、**Grep ツール** で以下を確認する:
+
+1. `$SESSION_DIR/02_references.md` を Grep で `ストーリーライン` を検索し、カウント
+2. 同ファイルを Grep で `主要な主張` を検索し、カウント
+
 - ストーリーラインが資料数と一致すること
 - 主要な主張が資料数と概ね一致すること（論文は品質評価で代替可）
 - 不一致の場合はバッチファイル側の生成不備を疑い、該当バッチのsubagentの出力を確認する
